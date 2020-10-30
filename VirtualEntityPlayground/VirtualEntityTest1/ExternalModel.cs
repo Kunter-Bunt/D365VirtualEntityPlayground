@@ -3,7 +3,7 @@ using System.Text;
 
 namespace VirtualEntityTest1
 {
-    class ExternalModel
+    public class ExternalModel
     {
         public string Id { get; set; }
 

@@ -29,12 +29,7 @@ namespace VirtualEntityTest1
             var collection = new EntityCollection();
             foreach(var record in externalRecords)
             {
-                Entity entity = new Entity("mwo_external");
-                entity.Attributes.Add("mwo_externalid", record.Guid);
-                entity.Attributes.Add("mwo_externalidname", record.Id);
-                entity.Attributes.Add("mwo_name", record.Name);
-                //entity.Attributes.Add("mwo_parent", record.Parent);
-
+                var entity = Retrieve.MapRecord(record);
                 collection.Entities.Add(entity);
             }
             return collection;

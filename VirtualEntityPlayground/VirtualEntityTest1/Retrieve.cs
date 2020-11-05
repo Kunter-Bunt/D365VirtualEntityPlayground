@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk;
 using System;
 using System.Linq;
+using VirtualEntityTest1.ChildEntity;
+using VirtualEntityTest1.ParentEntity;
 
 namespace VirtualEntityTest1
 {
@@ -14,9 +16,19 @@ namespace VirtualEntityTest1
             var reference = (EntityReference)context.InputParameters["Target"];
             trace.Trace($"Reference: {reference?.LogicalName}({reference?.Id})");
 
-            var rec = GetFromId(reference.Id);
-            trace.Trace("Record: " + rec.Id);
-            var entity = MapRecord(rec);
+            Entity entity = null;
+            if (reference.LogicalName == "mwo_external")
+            {
+                var rec = GetFromId(reference.Id);
+                trace.Trace("Record: " + rec.Id);
+                entity = MapRecord(rec);
+            }
+            else if (reference.LogicalName == "mwo_externalchild")
+            {
+                var rec = GetChildFromId(reference.Id);
+                trace.Trace("Record: " + rec.Id);
+                entity = MapRecord(rec);
+            }
 
             context.OutputParameters["BusinessEntity"] = entity;
         }
@@ -27,7 +39,7 @@ namespace VirtualEntityTest1
             entity.Attributes.Add("mwo_externalid", record.Guid);
             entity.Attributes.Add("mwo_externalidname", record.Id);
             entity.Attributes.Add("mwo_name", record.Name);
-            //entity.Attributes.Add("mwo_parent", record.Parent);
+            entity.Attributes.Add("mwo_account", new EntityReference("account", record.Account ?? Guid.Empty));
             return entity;
         }
 
@@ -37,5 +49,23 @@ namespace VirtualEntityTest1
             var list = repo.Query;
             return list.First(_ => _.Guid == guid);
         }
+
+        public static Entity MapRecord(ChildModel record)
+        {
+            Entity entity = new Entity("mwo_externalchild");
+            entity.Attributes.Add("mwo_externalchildid", record.Guid);
+            entity.Attributes.Add("mwo_externalidname", record.Id);
+            entity.Attributes.Add("mwo_name", record.Name);
+            entity.Attributes.Add("mwo_parent", new EntityReference("mwo_external", record.ParentGuid ?? Guid.Empty));
+            return entity;
+        }
+
+        private ChildModel GetChildFromId(Guid guid)
+        {
+            var repo = new ChildRepository();
+            var list = repo.Query;
+            return list.First(_ => _.Guid == guid);
+        }
+
     }
 }

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace VirtualEntityTest1
+namespace VirtualEntityTest1.ParentEntity
 {
     class Repository
     {
@@ -11,7 +12,8 @@ namespace VirtualEntityTest1
             new ExternalModel
             {
                 Id = "abc123",
-                Name = "Hello"
+                Name = "Hello",
+                Account = new Guid("a16b3f4b-1be7-e611-8101-e0071b6af231")
             },
             new ExternalModel
             {

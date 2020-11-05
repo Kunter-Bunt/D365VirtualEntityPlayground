@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace VirtualEntityTest1
+namespace VirtualEntityTest1.ParentEntity
 {
     public class ExternalModel
     {
@@ -9,12 +9,12 @@ namespace VirtualEntityTest1
 
         public Guid? Guid
         {
-            get => new Guid(Encoding.UTF8.GetBytes(Id?.PadRight(16) ?? "NoId"));
+            get => new Guid(Encoding.UTF8.GetBytes((Id ?? "NoId").PadRight(16)));
             set => Id = Encoding.UTF8.GetString(value.GetValueOrDefault().ToByteArray());
         }
 
         public string Name { get; set; }
 
-        public Guid? Parent { get; set; }
+        public Guid? Account { get; set; }
     }
 }

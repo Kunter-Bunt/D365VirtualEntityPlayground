@@ -61,11 +61,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChildEntity\ChildModel.cs" />
+    <Compile Include="ChildEntity\ChildRepository.cs" />
     <Compile Include="Retrieve.cs" />
     <Compile Include="RetrieveMultiple.cs" />
-    <Compile Include="ExternalModel.cs" />
+    <Compile Include="ParentEntity\ExternalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="ParentEntity\Repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\coretools\CrmSvcUtil.exe.config" />

@@ -12,9 +12,14 @@ namespace VirtualEntityTest1
         {
             var trace = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            var source = (IEntityDataSourceRetrieverService)serviceProvider.GetService(typeof(IEntityDataSourceRetrieverService));
+
             trace.Trace("Init");
             var reference = (EntityReference)context.InputParameters["Target"];
             trace.Trace($"Reference: {reference?.LogicalName}({reference?.Id})");
+
+            RetrieveMultiple.PrintContext(trace, context);
+            RetrieveMultiple.PrintSource(trace, source);
 
             Entity entity = null;
             if (reference.LogicalName == "mwo_external")

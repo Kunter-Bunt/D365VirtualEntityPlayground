@@ -18,13 +18,19 @@ namespace VirtualEntityTest1
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var service = factory.CreateOrganizationService(context.UserId);
+            var source = (IEntityDataSourceRetrieverService)serviceProvider.GetService(typeof(IEntityDataSourceRetrieverService));
+
             trace.Trace("Init");
+            PrintContext(trace, context);
+            PrintSource(trace, source);
+
+            EntityCollection collection = new EntityCollection { EntityName = "mwo_external" };
+
             var query = (QueryExpression)context.InputParameters["Query"];
             if (query != null)
             {
                 PrintQuery(trace, service, query);
 
-                EntityCollection collection = new EntityCollection();
                 if (query.EntityName == "mwo_external")
                 {
                     var externalRecords = GetFromCriteria(query.Criteria);
@@ -37,9 +43,29 @@ namespace VirtualEntityTest1
                 }
 
                 trace.Trace("Records: " + collection.Entities.Count);
-                context.OutputParameters["BusinessEntityCollection"] = collection;
             }
+
+            context.OutputParameters["BusinessEntityCollection"] = collection;
+
             trace.Trace("Done");
+        }
+
+        public static void PrintSource(ITracingService trace, IEntityDataSourceRetrieverService source)
+        {
+            var ent = source.RetrieveEntityDataSource();
+            trace.Trace($"Source: {ent?.LogicalName}({ent?.Id})");
+            foreach (var input in ent.Attributes)
+            {
+                trace.Trace($"{input.Key}: {input.Value}");
+            }
+        }
+
+        public static void PrintContext(ITracingService trace, IPluginExecutionContext context)
+        {
+            foreach (var input in context.InputParameters)
+            {
+                trace.Trace($"{input.Key}: {input.Value}");
+            }
         }
 
         private static void PrintQuery(ITracingService trace, IOrganizationService service, QueryExpression query)
@@ -68,7 +94,7 @@ namespace VirtualEntityTest1
 
         private EntityCollection MapRecords(IEnumerable<ExternalModel> externalRecords)
         {
-            var collection = new EntityCollection();
+            var collection = new EntityCollection { EntityName = "mwo_external" };
             foreach (var record in externalRecords)
             {
                 var entity = Retrieve.MapRecord(record);
@@ -101,7 +127,7 @@ namespace VirtualEntityTest1
 
         private EntityCollection MapRecords(IEnumerable<ChildModel> externalRecords)
         {
-            var collection = new EntityCollection();
+            var collection = new EntityCollection { EntityName = "mwo_externalchild" };
             foreach (var record in externalRecords)
             {
                 var entity = Retrieve.MapRecord(record);

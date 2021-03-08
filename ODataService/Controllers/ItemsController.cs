@@ -31,34 +31,38 @@ namespace ODataService.Controllers
         };
 
         /// <summary>
-        /// This sample only reacts to the filter "Name"!
+        /// This sample only returns something if the filter "Name" is present!
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
         [EnableQuery]
         public IQueryable<Item> Get(ODataQueryOptions options)
         {
-            if (options.Filter != null && options.Filter.FilterClause != null)
-            {
-                var binaryOperator = options.Filter.FilterClause.Expression as BinaryOperatorNode;
-                if (binaryOperator != null)
-                {
-                    var property = binaryOperator.Left as SingleValuePropertyAccessNode ?? binaryOperator.Right as SingleValuePropertyAccessNode;
-                    var constant = binaryOperator.Left as ConstantNode ?? binaryOperator.Right as ConstantNode;
+            var filter = GetFilter(options?.Filter?.FilterClause?.Expression);
 
-                    if (property != null && property.Property != null && constant != null && constant.Value != null)
-                    {
-                        Debug.WriteLine("Property: " + property.Property.Name);
-                        Debug.WriteLine("Operator: " + binaryOperator.OperatorKind);
-                        Debug.WriteLine("Value: " + constant.LiteralText);
-
-                        if (property.Property.Name == nameof(Item.Name))
-                            return items.Where(_ => _.Name == constant.LiteralText.Trim('\'')).AsQueryable();
-                    }
-                }
-            }
+            if (filter.ContainsKey(nameof(Item.Name)))
+                return items.Where(_ => _.Name == filter[nameof(Item.Name)].ToString()).AsQueryable();
 
             return new List<Item>().AsQueryable();
+        }
+
+        private Dictionary<string, object> GetFilter(SingleValueNode filter)
+        {
+            var dict = new Dictionary<string, object>();
+            if (filter is BinaryOperatorNode bin)
+            {
+                var left = GetFilter(bin.Left);
+                foreach (var filt in left)
+                    dict.Add(filt.Key, filt.Value);
+
+                var right = GetFilter(bin.Right);
+                foreach (var filt in right)
+                    dict.Add(filt.Key, filt.Value);
+
+                if (bin.Left is SingleValuePropertyAccessNode key && bin.Right is ConstantNode value)
+                    dict.Add(key.Property.Name, value.Value);
+            }
+            return dict;
         }
 
         public SingleResult<Item> Get([FromODataUri] Guid key)

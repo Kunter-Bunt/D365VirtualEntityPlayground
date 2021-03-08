@@ -16,6 +16,7 @@ namespace ODataService
             var builder = new ODataConventionModelBuilder();
             config.Count().Filter().OrderBy().Expand().Select().MaxTop(null);
             builder.EntitySet<Product>("Products");
+            builder.EntitySet<Item>("Items");
 
             config.MapODataServiceRoute("ODataRoute", null, builder.GetEdmModel());
 

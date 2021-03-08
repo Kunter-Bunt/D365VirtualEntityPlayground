@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ODataService.Models
 {
-    public class Item
+    public class Product
     {
         public Guid ID { get; set; }
         public string Name { get; set; }

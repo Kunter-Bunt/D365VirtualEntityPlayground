@@ -3,6 +3,7 @@ using ODataService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ODataService.Controllers
@@ -38,6 +39,17 @@ namespace ODataService.Controllers
         {
             IQueryable<Product> result = products.Where(p => p.ID == key).AsQueryable();
             return SingleResult.Create(result);
+        }
+
+        public IHttpActionResult Delete([FromODataUri] Guid key)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IHttpActionResult Put([FromODataUri] Guid key)
+        {
+            throw new InvalidOperationException();
         }
     }
 }

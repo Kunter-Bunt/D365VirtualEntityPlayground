@@ -3,6 +3,9 @@ using WebActivatorEx;
 using ODataService;
 using Swashbuckle.Application;
 using Swashbuckle.OData;
+using Swashbuckle.Swagger;
+using System.Web.Http.Description;
+using System.Collections.Generic;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -19,6 +22,8 @@ namespace ODataService
                     {
                         c.CustomProvider(defaultProvider => new ODataSwaggerProvider(defaultProvider, c, GlobalConfiguration.Configuration));
 
+
+                        c.DocumentFilter<MetadataOperation>();
 
                         // By default, the service root url is inferred from the request used to access the docs.
                         // However, there may be situations (e.g. proxy and load-balanced environments) where this does not
@@ -254,6 +259,28 @@ namespace ODataService
                         //
                         //c.EnableApiKeySupport("apiKey", "header");
                     });
+        }
+    }
+    public class MetadataOperation : IDocumentFilter
+    {
+        public void Apply(SwaggerDocument swaggerDoc, SchemaRegistry schemaRegistry, IApiExplorer apiExplorer)
+        {
+            swaggerDoc.paths.Add("/$metadata", new PathItem
+            {
+                get = new Operation
+                {
+                    operationId = "$metadata",
+                    produces = new List<string> { "application/xml" }
+                }
+            });
+            swaggerDoc.paths.Add("/", new PathItem
+            {
+                get = new Operation
+                {
+                    operationId = "/",
+                    produces = new List<string> { "application/json" }
+                }
+            });
         }
     }
 }

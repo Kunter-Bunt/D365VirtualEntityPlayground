@@ -19,14 +19,16 @@ namespace ODataService.Controllers
                 ID = new Guid("1852B129-26BA-4880-A2D5-32DBF95515E5"),
                 Name = "Bread",
                 Description = "A slice of Bread",
-                EAN = 12345
+                EAN = 12345,
+                LastModified = new DateTime(2020, 12, 1),
             },
             new Item()
             {
                 ID = new Guid("CC20B7A7-2BA6-4C3C-85D5-C3A82F986324"),
                 Name = "Butter",
                 Description = "Golden Smooth",
-                EAN = 67890
+                EAN = 67890,
+                LastModified = DateTime.UtcNow,
             }
         };
 

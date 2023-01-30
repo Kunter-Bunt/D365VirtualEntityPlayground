@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31005.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODataService", "ODataService.csproj", "{D70C176C-B6F3-44CC-B41B-8FAEB14E9A77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomAPI", "..\CustomAPI\CustomAPI.csproj", "{09AEBAEA-F132-4AF4-9055-1AE611F599CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D70C176C-B6F3-44CC-B41B-8FAEB14E9A77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D70C176C-B6F3-44CC-B41B-8FAEB14E9A77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D70C176C-B6F3-44CC-B41B-8FAEB14E9A77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09AEBAEA-F132-4AF4-9055-1AE611F599CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09AEBAEA-F132-4AF4-9055-1AE611F599CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09AEBAEA-F132-4AF4-9055-1AE611F599CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09AEBAEA-F132-4AF4-9055-1AE611F599CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
